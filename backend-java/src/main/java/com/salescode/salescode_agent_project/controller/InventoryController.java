@@ -1,6 +1,8 @@
 package com.salescode.salescode_agent_project.controller;
 
+import com.salescode.salescode_agent_project.model.Orders;
 import com.salescode.salescode_agent_project.model.Product;
+import com.salescode.salescode_agent_project.repository.OrdersRepository;
 import com.salescode.salescode_agent_project.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +15,23 @@ public class InventoryController {
 
     @Autowired
     private ProductRepository repository;
-
+    @Autowired
+    private OrdersRepository repository2;
     // Tool 1 for AI: Search
     @GetMapping("/products")
     public List<Product> searchProducts(@RequestParam String query) {
         return repository.findByNameContainingIgnoreCase(query);
     }
 
+    @GetMapping("/all-products")
+    public List<Product> getAllProducts() {
+        return repository.findAll();
+    }
+
+    @GetMapping("/recent-orders")
+    public List<Orders> getRecentOrders() {
+        return repository2.FiveRecentOrders();
+    }
     // Tool 2 for AI: Place Order
     @PostMapping("/order")
     public String placeOrder(@RequestParam String productId, @RequestParam int quantity) {
